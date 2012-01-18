@@ -2,7 +2,15 @@ var jsCipher = (function() {
 	var jsCipher = {};
 	var slice = Array.prototype.slice;
 	var nativeForEach = Array.prototype.forEach;
+	jsCipher.optionsData = {};
+	var defaults = {
+		explainSteps: false,
+		showSteps: false
+	}
 
+	jsCipher.fn = {};
+
+	//--------------------------------------------------------------------
 	jsCipher._each = function(obj, iterator, context)
 	{
 		if (obj == null) return;
@@ -50,15 +58,74 @@ var jsCipher = (function() {
 		return obj;
 	};
 	//--------------------------------------------------------------------
-	jsCipher.test1 = function()
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	jsCipher.init = function(defaults)
 	{
-		console.log("Test 1");
-	};
-
-	jsCipher.test2 = function()
+		if(defaults != undefined && defaults != "" && defaults != null && defaults.length != 0)
+		{
+			jsCipher.optionsData = jsCipher._extend(jsCipher.optionsData, defaults);
+		}
+	}
+	jsCipher.option = function(key, value)
 	{
-		console.log("Test 2");
-	};
+		if(jsCipher.optionsData == undefined)
+		{
+			jsCipher.optionsData = {};
+		}
+		if(value != undefined)
+		{
+			// Set
+			jsCipher.optionsData[key] = value;
+			return true;
+		}
+		else
+		{
+			if(jsCipher.optionsData.hasOwnProperty(key))
+			{
+				return jsCipher.optionsData[key];
+			}
+			else
+			{
+				return undefined;
+			}
+		}
+	}
+	jsCipher.setOptions = function(json)
+	{
+		jsCipher.optionsData = jsCipher._extend(jsCipher.optionsData, json);
+	}
 	
+	jsCipher._cmethod = function(method, func, value)
+	{
+		var x = jsCipher;
+		if(x.fn.hasOwnProperty(method))
+		{
+			return x.fn[method].call(func,value);
+		}
+		else
+		{
+			if(window.console && window.console.log)
+			{
+				console.log("Error","No cipher method '"+method+"'.");
+				return undefined;
+			}
+		}
+	}
+
+	jsCipher.encipher = function(method, value)
+	{
+		return jsCipher._cmethod(method,"encipher",velue);
+	}
+
+	jsCipher.decipher = function(method, value)
+	{
+		return jsCipher._cmethod(method,"decipher",velue);
+	}
+	//--------------------------------------------------------------------
+	
+	jsCipher.optionsData = jsCipher._defaults(jsCipher.optionsData, defaults);
+
 	return jsCipher
 })();
